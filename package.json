@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "npx prisma generate && node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "npx prisma generate"
   },
   "author": "Ijlal Dhisa",
   "license": "ISC",
