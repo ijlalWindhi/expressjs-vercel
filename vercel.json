@@ -4,7 +4,13 @@
     {
       "src": "index.js",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["prisma/schema.prisma", "dist/**"] }
+      "config": {
+        "includeFiles": [
+          "prisma/schema.prisma",
+          "node_modules/.prisma/**",
+          "node_modules/@prisma/**"
+        ]
+      }
     }
   ],
   "routes": [
@@ -13,5 +19,8 @@
       "dest": "index.js"
     }
   ],
-  "buildCommand": "prisma generate && npm install"
+  "buildCommand": "prisma generate && npm install",
+  "env": {
+    "DATABASE_URL": "postgres://admin:oPL4WaDbwjR7@ep-royal-snow-a12hkqfv.ap-southeast-1.pg.koyeb.app/koyebdb"
+  }
 }
