@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../utils/prisma.js";
 import { v4 as uuidv4 } from "uuid";
 import { validationResult, matchedData } from "express-validator";
-
-const prisma = new PrismaClient();
 
 export const createCertificate = async (req, res) => {
   try {
