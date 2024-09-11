@@ -1,17 +1,17 @@
-import prisma from "../utils/prisma.js";
 import { v4 as uuidv4 } from "uuid";
 import { validationResult, matchedData } from "express-validator";
+
+import prisma from "../utils/prisma.js";
+import { errorResponse, successResponse } from "../utils/responsHandler.js";
 
 export const createProject = async (req, res) => {
   try {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        status: 400,
-        message: "Bad Request",
-        detail: "Validation error",
-        errors: errors.array(),
+      return errorResponse(res, 400, "Validation error", {
+        code: "VALIDATION_ERROR",
+        error: errors.array(),
       });
     } else {
       const data = matchedData(req);
@@ -25,14 +25,12 @@ export const createProject = async (req, res) => {
         },
       });
 
-      res.status(201).json(project);
+      successResponse(res, 201, "Successfully create project!", project);
     }
   } catch (error) {
-    res.status(500).json({
-      status: 500,
-      detail: error,
-      message: "Internal server error",
-      errors: [],
+    errorResponse(res, 500, "Internal server error", {
+      code: "INTERNAL_SERVER_ERROR",
+      error: error,
     });
   }
 };
@@ -42,11 +40,9 @@ export const updateProject = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({
-        status: 400,
-        message: "Bad Request",
-        detail: "Validation error",
-        errors: errors.array(),
+      return errorResponse(res, 400, "Validation error", {
+        code: "VALIDATION_ERROR",
+        error: errors.array(),
       });
     } else {
       const data = matchedData(req);
@@ -58,11 +54,9 @@ export const updateProject = async (req, res) => {
       });
 
       if (!projectExists) {
-        return res.status(404).json({
-          status: 404,
-          message: "Not Found",
-          detail: "Project not found",
-          errors: [],
+        return errorResponse(res, 404, "Data not found", {
+          code: "DATA_NOT_FOUND",
+          error: `Project with uuid ${data.uuid} not found`,
         });
       }
 
@@ -78,14 +72,12 @@ export const updateProject = async (req, res) => {
         },
       });
 
-      res.status(201).json(project);
+      successResponse(res, 200, "Successfully update project!", project);
     }
   } catch (error) {
-    res.status(500).json({
-      status: 500,
-      detail: error,
-      message: "Internal server error",
-      errors: [],
+    errorResponse(res, 500, "Internal server error", {
+      code: "INTERNAL_SERVER_ERROR",
+      error: error,
     });
   }
 };
@@ -101,11 +93,9 @@ export const deleteProject = async (req, res) => {
     });
 
     if (!projectExists) {
-      return res.status(404).json({
-        status: 404,
-        message: "Not Found",
-        detail: "Project not found",
-        errors: [],
+      return errorResponse(res, 404, "Data not found", {
+        code: "DATA_NOT_FOUND",
+        error: `Project with uuid ${uuid} not found`,
       });
     }
 
@@ -115,28 +105,24 @@ export const deleteProject = async (req, res) => {
       },
     });
 
-    res.status(204).json();
+    successResponse(res, 204, "Successfully delete certificate!");
   } catch (error) {
-    res.status(500).json({
-      status: 500,
-      detail: error,
-      message: "Internal server error",
-      errors: [],
+    errorResponse(res, 500, "Internal server error", {
+      code: "INTERNAL_SERVER_ERROR",
+      error: error,
     });
   }
 };
 
-export const getAllProjects = async (req, res) => {
+export const getAllProjects = async (_req, res) => {
   try {
     const projects = await prisma.project.findMany();
 
-    res.status(200).json(projects);
+    successResponse(res, 200, "Successfully get all projects!", projects);
   } catch (error) {
-    res.status(500).json({
-      status: 500,
-      detail: error,
-      message: "Internal server error",
-      errors: [],
+    errorResponse(res, 500, "Internal server error", {
+      code: "INTERNAL_SERVER_ERROR",
+      error: error,
     });
   }
 };
@@ -152,21 +138,17 @@ export const getProject = async (req, res) => {
     });
 
     if (!project) {
-      return res.status(404).json({
-        status: 404,
-        message: "Not Found",
-        detail: "Project not found",
-        errors: [],
+      return errorResponse(res, 404, "Data not found", {
+        code: "DATA_NOT_FOUND",
+        error: `Project with uuid ${uuid} not found`,
       });
     }
 
-    res.status(200).json(project);
+    successResponse(res, 200, "Successfully get project!", project);
   } catch (error) {
-    res.status(500).json({
-      status: 500,
-      detail: error,
-      message: "Internal server error",
-      errors: [],
+    errorResponse(res, 500, "Internal server error", {
+      code: "INTERNAL_SERVER_ERROR",
+      error: error,
     });
   }
 };
