@@ -58,7 +58,7 @@ export const updateCertificate = async (req, res) => {
 
       if (!certificateExists) {
         return errorResponse(res, 404, "Data not found", {
-          code: "NOT_FOUND",
+          code: "DATA_NOT_FOUND",
           error: `Certificate with uuid ${data.uuid} not found`,
         });
       }
@@ -100,7 +100,7 @@ export const deleteCertificate = async (req, res) => {
 
     if (!certificateExists) {
       return errorResponse(res, 404, "Data not found", {
-        code: "NOT_FOUND",
+        code: "DATA_NOT_FOUND",
         error: `Certificate with uuid ${uuid} not found`,
       });
     }
@@ -150,7 +150,7 @@ export const getCertificate = async (req, res) => {
 
     if (!certificate) {
       return errorResponse(res, 404, "Data not found", {
-        code: "NOT_FOUND",
+        code: "DATA_NOT_FOUND",
         error: `Certificate with uuid ${uuid} not found`,
       });
     }
