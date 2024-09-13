@@ -2,7 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import { routerProject, routerCertificate } from "./routes/index.js";
+import {
+  routerProject,
+  routerCertificate,
+  routerCareer,
+} from "./routes/index.js";
 
 dotenv.config();
 
@@ -22,6 +26,7 @@ app.get("/ping", (_req, res) => {
 
 app.use("/project", routerProject);
 app.use("/certificate", routerCertificate);
+app.use("/career", routerCareer);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
