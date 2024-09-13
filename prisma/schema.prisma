@@ -34,3 +34,35 @@ model project {
   url_cover    String   @db.VarChar(255)
   technologies String[]
 }
+
+model career {
+  id           Int          @id @default(autoincrement())
+  uuid         String       @unique @db.VarChar(255)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  position     String       @db.VarChar(100)
+  company      String       @db.VarChar(100)
+  logo         String       @db.VarChar(255)
+  location     String       @db.VarChar(100)
+  locationType LocationType
+  type         JobType
+  startDate    DateTime
+  endDate      DateTime
+  link         String       @db.VarChar(255)
+}
+
+enum LocationType {
+  remote
+  onSite
+  hybrid
+}
+
+enum JobType {
+  fullTime
+  partTime
+  contract
+  internship
+  volunteer
+  temporary
+  freelance
+}
