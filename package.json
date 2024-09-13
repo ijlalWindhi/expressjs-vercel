@@ -9,8 +9,7 @@
     "dev": "nodemon index.js",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "format": "npx prettier --write .",
-    "prepare": "husky"
+    "format": "npx prettier --write ."
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
