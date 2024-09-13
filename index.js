@@ -6,6 +6,7 @@ import {
   routerProject,
   routerCertificate,
   routerCareer,
+  routerUser,
 } from "./routes/index.js";
 import corsOptions from "./utils/cors.js";
 
@@ -29,6 +30,7 @@ app.get("/ping", (_req, res) => {
 app.use("/project", routerProject);
 app.use("/certificate", routerCertificate);
 app.use("/career", routerCareer);
+app.use("/user", routerUser);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
