@@ -1,0 +1,6 @@
+/dist
+.gitignore
+.prettierignore
+LICENSE
+*.lock
+version.json
