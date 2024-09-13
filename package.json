@@ -7,9 +7,17 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "lint": "next lint",
+    "format": "npx prettier --write .",
+    "prepare": "husky"
   },
-  "author": "Ijlal Dhisa",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run format"
+    ]
+  },
+  "author": "Ijlal Windhi",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.19.1",
@@ -20,10 +28,15 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/uuid": "^10.0.0",
     "concurrently": "^9.0.0",
+    "eslint": "^9.10.0",
     "express": "^4.19.2",
+    "husk": "^0.5.3",
     "nodemon": "^3.1.4",
     "prisma": "^5.19.1"
   }
