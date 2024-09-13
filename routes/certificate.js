@@ -11,23 +11,23 @@ const router = Router();
 router.post(
   "/",
   createCertificateSchema,
-  certificateController.createCertificate
+  certificateController.createCertificate,
 );
 router.put(
   "/:uuid",
   updateCertificateSchema,
-  certificateController.updateCertificate
+  certificateController.updateCertificate,
 );
 router.delete(
   "/:uuid",
   paramsCertificateSchema,
-  certificateController.deleteCertificate
+  certificateController.deleteCertificate,
 );
 router.get("/", certificateController.getAllCertificates);
 router.get(
   "/:uuid",
   paramsCertificateSchema,
-  certificateController.getCertificate
+  certificateController.getCertificate,
 );
 
 export default router;

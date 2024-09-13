@@ -27,7 +27,7 @@ export const createCertificate = async (req, res) => {
         res,
         201,
         "Successfully create certificate!",
-        certificate
+        certificate,
       );
     }
   } catch (error) {
@@ -77,7 +77,7 @@ export const updateCertificate = async (req, res) => {
         res,
         200,
         "Successfully update certificate!",
-        certificate
+        certificate,
       );
     }
   } catch (error) {
@@ -128,7 +128,7 @@ export const getAllCertificates = async (_req, res) => {
       res,
       200,
       "Successfully get all certificates!",
-      certificates
+      certificates,
     );
   } catch (error) {
     errorResponse(res, 500, "Internal server error", {
