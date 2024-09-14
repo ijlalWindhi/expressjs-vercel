@@ -7,6 +7,7 @@ import {
   routerCertificate,
   routerCareer,
   routerUser,
+  routerAuth,
 } from "./routes/index.js";
 import corsOptions from "./utils/cors.js";
 
@@ -31,6 +32,7 @@ app.use("/project", routerProject);
 app.use("/certificate", routerCertificate);
 app.use("/career", routerCareer);
 app.use("/user", routerUser);
+app.use("/auth", routerAuth);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
