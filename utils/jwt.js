@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-import { errorResponse } from "./responsHandler";
+import { errorResponse } from "./responsHandler.js";
 
 export function generateAccessToken(data) {
   return jwt.sign({ data }, process.env.SECRET_KEY, {
