@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import * as authController from "../controller/auth.js";
 import { loginSchema } from "../utils/validation-schema/auth.js";
 

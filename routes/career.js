@@ -1,17 +1,39 @@
 import { Router } from "express";
+
 import * as careerController from "../controller/career.js";
 import {
   createCareerSchema,
   updateCareerSchema,
   paramsCareerSchema,
 } from "../utils/validation-schema/career.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/", createCareerSchema, careerController.createCareer);
-router.put("/:uuid", updateCareerSchema, careerController.updateCareer);
-router.delete("/:uuid", paramsCareerSchema, careerController.deleteCareer);
-router.get("/", careerController.getAllCareers);
-router.get("/:uuid", paramsCareerSchema, careerController.getCareer);
+router.post(
+  "/",
+  authenticateToken,
+  createCareerSchema,
+  careerController.createCareer,
+);
+router.put(
+  "/:uuid",
+  authenticateToken,
+  updateCareerSchema,
+  careerController.updateCareer,
+);
+router.delete(
+  "/:uuid",
+  authenticateToken,
+  paramsCareerSchema,
+  careerController.deleteCareer,
+);
+router.get("/", authenticateToken, careerController.getAllCareers);
+router.get(
+  "/:uuid",
+  authenticateToken,
+  paramsCareerSchema,
+  careerController.getCareer,
+);
 
 export default router;

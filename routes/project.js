@@ -5,13 +5,34 @@ import {
   updateProjectSchema,
   paramsProjectSchema,
 } from "../utils/validation-schema/project.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const router = Router();
 
-router.post("/", createProjectSchema, projectController.createProject);
-router.put("/:uuid", updateProjectSchema, projectController.updateProject);
-router.delete("/:uuid", paramsProjectSchema, projectController.deleteProject);
-router.get("/", projectController.getAllProjects);
-router.get("/:uuid", paramsProjectSchema, projectController.getProject);
+router.post(
+  "/",
+  authenticateToken,
+  createProjectSchema,
+  projectController.createProject,
+);
+router.put(
+  "/:uuid",
+  authenticateToken,
+  updateProjectSchema,
+  projectController.updateProject,
+);
+router.delete(
+  "/:uuid",
+  authenticateToken,
+  paramsProjectSchema,
+  projectController.deleteProject,
+);
+router.get("/", authenticateToken, projectController.getAllProjects);
+router.get(
+  "/:uuid",
+  authenticateToken,
+  paramsProjectSchema,
+  projectController.getProject,
+);
 
 export default router;
