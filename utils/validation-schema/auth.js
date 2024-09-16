@@ -1,6 +1,17 @@
 import { body } from "express-validator";
 
 export const loginSchema = [
-  body("email").isEmail().notEmpty().escape().trim(),
-  body("password").isStrongPassword().notEmpty().escape().trim(),
+  body("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email format")
+    .escape()
+    .trim(),
+  body("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .isString()
+    .escape()
+    .trim(),
 ];
