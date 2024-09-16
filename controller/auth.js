@@ -92,7 +92,7 @@ export const logout = async (req, res) => {
   try {
     const refreshToken = await prisma.refreshToken.findFirst({
       where: {
-        token: req.token,
+        token: req?.cookies?.["refresh-token"],
       },
     });
 
@@ -123,10 +123,9 @@ export const logout = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
-    const data = matchedData(req);
     const refreshToken = await prisma.refreshToken.findFirst({
       where: {
-        token: data.token,
+        token: req?.cookies?.["refresh-token"],
       },
       include: {
         user: true,
