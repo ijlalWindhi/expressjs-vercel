@@ -1,6 +1,7 @@
 import { validationResult, matchedData } from "express-validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
 
 import prisma from "../utils/prisma.js";
 import { errorResponse, successResponse } from "../utils/responsHandler.js";
@@ -57,6 +58,7 @@ export const login = async (req, res) => {
 
       await prisma.refreshToken.create({
         data: {
+          uuid: uuidv4(),
           token: refreshToken,
           expires_at: expiresAt,
           user_agent: req.headers["user-agent"],
@@ -64,7 +66,6 @@ export const login = async (req, res) => {
             req.ip ||
             req.headers["x-forwarded-for"] ||
             req.connection.remoteAddress,
-          user_id: user.id,
           user: {
             connect: {
               uuid: user.uuid,
@@ -140,10 +141,15 @@ export const refreshToken = async (req, res) => {
     }
 
     if (refreshToken.expires_at < new Date()) {
-      return errorResponse(res, 401, "Unauthorized", {
-        code: "UNAUTHORIZED",
-        error: `Refresh token has expired`,
-      });
+      return errorResponse(
+        res,
+        401,
+        "Your session has expired. Please login again.",
+        {
+          code: "REFRESH_TOKEN_EXPIRED",
+          error: "Refresh token expired",
+        },
+      );
     }
 
     const restractedUser = {
