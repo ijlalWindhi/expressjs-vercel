@@ -16,22 +16,24 @@ datasource db {
 }
 
 model Certificate {
-  id        Int      @id @default(autoincrement())
-  uuid      String   @unique @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  url       String   @db.VarChar(255)
+  id        Int       @id @default(autoincrement())
+  uuid      String    @unique @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  title     String    @db.VarChar(255)
+  url       String    @db.VarChar(255)
 }
 
 model Project {
-  id           Int      @id @default(autoincrement())
-  uuid         String   @unique @db.VarChar(255)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  title        String   @db.VarChar(255)
-  description  String   @db.Text
-  url_cover    String   @db.VarChar(255)
+  id           Int       @id @default(autoincrement())
+  uuid         String    @unique @db.VarChar(255)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+  title        String    @db.VarChar(255)
+  description  String    @db.Text
+  url_cover    String    @db.VarChar(255)
   technologies String[]
 }
 
@@ -40,6 +42,7 @@ model Career {
   uuid          String       @unique @db.VarChar(255)
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
+  deletedAt     DateTime?
   position      String       @db.VarChar(100)
   company       String       @db.VarChar(100)
   logo          String       @db.VarChar(255)
@@ -56,6 +59,7 @@ model User {
   uuid          String         @unique @db.VarChar(255)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
   email         String         @unique @db.VarChar(255)
   password      String         @db.VarChar(255)
   phone         String         @db.VarChar(100)
