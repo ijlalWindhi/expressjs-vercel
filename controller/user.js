@@ -39,7 +39,7 @@ export const createUser = async (req, res) => {
           email: data.email,
           password: hashedPassword,
           name: data.name,
-          phone: data.phone,
+          phone: data.phone?.replace("+62", "0"),
           role: data.role,
         },
       });
@@ -111,7 +111,7 @@ export const updateUser = async (req, res) => {
           email: data.email,
           password: data.password,
           name: data.name,
-          phone: data.phone,
+          phone: data.phone?.replace("+62", "0"),
           role: data.role,
         },
       });
@@ -160,7 +160,11 @@ export const deleteUser = async (req, res) => {
 
 export const getAllUsers = async (_req, res) => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     successResponse(res, 200, "Successfully get all users!", users);
   } catch (error) {
