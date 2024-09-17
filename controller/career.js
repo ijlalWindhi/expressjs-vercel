@@ -4,6 +4,22 @@ import { validationResult, matchedData } from "express-validator";
 import prisma from "../utils/prisma.js";
 import { errorResponse, successResponse } from "../utils/responsHandler.js";
 
+const jobTypeMapping = {
+  fullTime: "Full Time",
+  partTime: "Part Time",
+  contract: "Contract",
+  internship: "Internship",
+  volunteer: "Volunteer",
+  temporary: "Temporary",
+  freelance: "Freelance",
+};
+
+const locationTypeMapping = {
+  remote: "Remote",
+  onSite: "Onsite",
+  hybrid: "Hybrid",
+};
+
 export const createCareer = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -109,9 +125,12 @@ export const deleteCareer = async (req, res) => {
       });
     }
 
-    await prisma.career.delete({
+    await prisma.career.update({
       where: {
         uuid,
+      },
+      data: {
+        deletedAt: new Date(),
       },
     });
 
@@ -126,7 +145,18 @@ export const deleteCareer = async (req, res) => {
 
 export const getAllCareers = async (_req, res) => {
   try {
-    const careers = await prisma.career.findMany();
+    const careers = await prisma.career.findMany({
+      where: {
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    careers.map((career) => {
+      career.type = jobTypeMapping[career.type];
+      career.location_type = locationTypeMapping[career.location_type];
+    });
 
     successResponse(res, 200, "Successfully get all careers!", careers);
   } catch (error) {
@@ -147,12 +177,16 @@ export const getCareer = async (req, res) => {
       },
     });
 
-    if (!career) {
+    if (!career || career.deletedAt !== null) {
       return errorResponse(res, 404, "Data not found", {
         code: "DATA_NOT_FOUND",
-        error: `Career with uuid ${uuid} not found`,
+        error: `Career with uuid ${uuid} ${
+          career.deletedAt !== null ? "has been deleted" : "not found"
+        }`,
       });
     }
+    career.type = jobTypeMapping[career.type];
+    career.location_type = locationTypeMapping[career.location_type];
 
     successResponse(res, 200, "Successfully get career!", career);
   } catch (error) {
