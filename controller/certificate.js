@@ -105,9 +105,12 @@ export const deleteCertificate = async (req, res) => {
       });
     }
 
-    await prisma.certificate.delete({
+    await prisma.certificate.update({
       where: {
         uuid,
+      },
+      data: {
+        deletedAt: new Date(),
       },
     });
 
@@ -122,7 +125,14 @@ export const deleteCertificate = async (req, res) => {
 
 export const getAllCertificates = async (_req, res) => {
   try {
-    const certificates = await prisma.certificate.findMany();
+    const certificates = await prisma.certificate.findMany({
+      where: {
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     successResponse(
       res,
@@ -148,10 +158,12 @@ export const getCertificate = async (req, res) => {
       },
     });
 
-    if (!certificate) {
+    if (!certificate || certificate.deletedAt !== null) {
       return errorResponse(res, 404, "Data not found", {
         code: "DATA_NOT_FOUND",
-        error: `Certificate with uuid ${uuid} not found`,
+        error: `Certificate with uuid ${uuid} ${
+          certificate.deletedAt !== null ? "has been deleted" : "not found"
+        }`,
       });
     }
 
