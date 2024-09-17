@@ -99,9 +99,12 @@ export const deleteProject = async (req, res) => {
       });
     }
 
-    await prisma.project.delete({
+    await prisma.project.update({
       where: {
         uuid,
+      },
+      data: {
+        deletedAt: new Date(),
       },
     });
 
@@ -116,7 +119,14 @@ export const deleteProject = async (req, res) => {
 
 export const getAllProjects = async (_req, res) => {
   try {
-    const projects = await prisma.project.findMany();
+    const projects = await prisma.project.findMany({
+      where: {
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
     successResponse(res, 200, "Successfully get all projects!", projects);
   } catch (error) {
@@ -137,10 +147,12 @@ export const getProject = async (req, res) => {
       },
     });
 
-    if (!project) {
+    if (!project || project.deletedAt !== null) {
       return errorResponse(res, 404, "Data not found", {
         code: "DATA_NOT_FOUND",
-        error: `Project with uuid ${uuid} not found`,
+        error: `Project with uuid ${uuid} ${
+          project.deletedAt !== null ? "has been deleted" : "not found"
+        }`,
       });
     }
 
