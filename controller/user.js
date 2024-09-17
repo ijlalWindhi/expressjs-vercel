@@ -143,9 +143,12 @@ export const deleteUser = async (req, res) => {
       });
     }
 
-    await prisma.user.delete({
+    await prisma.user.update({
       where: {
         uuid,
+      },
+      data: {
+        deletedAt: new Date(),
       },
     });
 
@@ -161,6 +164,9 @@ export const deleteUser = async (req, res) => {
 export const getAllUsers = async (_req, res) => {
   try {
     const users = await prisma.user.findMany({
+      where: {
+        deletedAt: null,
+      },
       orderBy: {
         createdAt: "desc",
       },
@@ -181,14 +187,16 @@ export const getUser = async (req, res) => {
 
     const user = await prisma.user.findUnique({
       where: {
-        uuid,
+        uuid: uuid,
       },
     });
 
-    if (!user) {
+    if (!user || user.deletedAt !== null) {
       return errorResponse(res, 404, "Data not found", {
         code: "DATA_NOT_FOUND",
-        error: `User with uuid ${uuid} not found`,
+        error: `User with uuid ${uuid} ${
+          user.deletedAt !== null ? "has been deleted" : "not found"
+        }`,
       });
     }
 
