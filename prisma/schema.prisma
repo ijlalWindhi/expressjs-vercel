@@ -49,8 +49,8 @@ model Career {
   location      String       @db.VarChar(100)
   location_type LocationType
   type          JobType
-  start_date    DateTime
-  end_date      DateTime
+  start_date    String
+  end_date      String?
   link          String       @db.VarChar(255)
 }
 
