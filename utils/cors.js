@@ -1,6 +1,6 @@
 import cors from "cors";
 
-const whiteList = ["http://localhost:3001"];
+const whiteList = ["http://localhost:3001", "https://ijlaldhisa.my.id"];
 
 const corsOptions = {
   origin: function (origin, callback) {
