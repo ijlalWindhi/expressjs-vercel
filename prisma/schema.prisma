@@ -76,8 +76,8 @@ model RefreshToken {
   token      String   @unique @db.VarChar(255)
   expires_at DateTime
   revoked    Boolean  @default(false)
-  user_agent String   @db.VarChar(100)
-  ip_address String   @db.VarChar(100)
+  user_agent String   @db.VarChar(255)
+  ip_address String   @db.VarChar(255)
   user       User     @relation(fields: [user_id], references: [id])
   user_id    Int
 }
