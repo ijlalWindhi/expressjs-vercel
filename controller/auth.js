@@ -90,9 +90,18 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
+    const refreshTokenCookie = req?.cookies?.["refresh-token"];
+
+    if (!refreshTokenCookie) {
+      return errorResponse(res, 401, "Unauthorized", {
+        code: "REFRESH_TOKEN_REQUIRED",
+        error: "Refresh token required",
+      });
+    }
+
     const refreshToken = await prisma.refreshToken.findFirst({
       where: {
-        token: req?.cookies?.["refresh-token"],
+        token: refreshTokenCookie,
       },
     });
 
@@ -123,9 +132,18 @@ export const logout = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
+    const refreshTokenCookie = req?.cookies?.["refresh-token"];
+
+    if (!refreshTokenCookie) {
+      return errorResponse(res, 401, "Unauthorized", {
+        code: "REFRESH_TOKEN_REQUIRED",
+        error: "Refresh token required",
+      });
+    }
+
     const refreshToken = await prisma.refreshToken.findFirst({
       where: {
-        token: req?.cookies?.["refresh-token"],
+        token: refreshTokenCookie,
       },
       include: {
         user: true,
@@ -134,8 +152,12 @@ export const refreshToken = async (req, res) => {
 
     if (!refreshToken || refreshToken.revoked) {
       return errorResponse(res, 404, "Invalid refresh token", {
-        code: "REFRESH_TOKEN_NOT_FOUND",
-        error: `Invalid refresh token`,
+        code: refreshToken?.revoked
+          ? "REFRESH_TOKEN_REVOKED"
+          : "REFRESH_TOKEN_NOT_FOUND",
+        error: refreshToken?.revoked
+          ? "Refresh token revoked"
+          : "Invalid refresh token",
       });
     }
 
